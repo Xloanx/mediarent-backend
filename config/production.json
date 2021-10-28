@@ -1,0 +1,10 @@
+{
+    "name" : "My Vidly App - Production",
+    "mail" : {
+        "host" : "127.0.0.1"
+    },
+    "database" :{
+        "host" : "127.0.0.1"
+    }
+
+}
