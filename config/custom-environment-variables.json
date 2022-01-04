@@ -1,6 +1,6 @@
 {
     "mail" : {
-        "password" : "vidly-mail-password"
+        "password" : "VIDLY-MAIL-PASSWORD"
     },
     "database" :{
         "password" : "VIDLY-DATABASE-PASSWORD"
