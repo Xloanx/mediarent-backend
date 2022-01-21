@@ -73,7 +73,7 @@ router.get('/', async (req,res)=>{
     } 
 })
 
-// router.get('/:id', async (req,res)=>{
+// router.get('/me', auth, async (req,res)=>{
 //     let movie = res.send(await getMovie(req.params.id));
 //     if(!movie) return res.status(404).send("invalid Movie Id");
 //     res.send(movie);

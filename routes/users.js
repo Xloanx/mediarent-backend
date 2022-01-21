@@ -3,6 +3,7 @@ const router = express.Router();
 const {User, userValidation} = require('../models/users-model');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
+const auth = require('../middleware/auth');
 
 
 router.post('/', async (req,res)=>{
@@ -35,16 +36,14 @@ router.post('/', async (req,res)=>{
 })
 
 
-// router.get('/', async (req,res)=>{
-//     try {
-//         return res.send(await User
-//             .find()
-//             .sort('name')
-//             .select("name email phone isAdmin"));
-//     } catch (error) {
-//         return ("Couldn't fetch from mongodb...", error.message);
-//     } 
-// })
+router.get('/me', auth, async (req,res)=>{
+    try {
+        //res.send(req.user._id);
+        res.send( await User.findById(req.user._id).select('name email -passowrd'));
+    } catch (error) {
+        res.send("Couldn't fetch from mongodb!!!");
+    } 
+})
 
 
 
