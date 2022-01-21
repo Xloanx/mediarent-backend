@@ -2,7 +2,12 @@
     "mail" : {
         "password" : "VIDLY-MAIL-PASSWORD"
     },
+
     "database" :{
         "password" : "VIDLY-DATABASE-PASSWORD"
+    },
+
+    "token" : {
+        "jwtPrivateKey" : "VIDLY-JWTPRIVATEDKEY"
     }
 }

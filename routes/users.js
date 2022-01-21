@@ -25,21 +25,26 @@ router.post('/', async (req,res)=>{
     } 
     catch (error) {
         return ("Couldn't write to mongodb...", error.message );
-    } 
-    res.send(_.pick(user, ['_id', 'name', 'email']));
+    }
+    //if we want to grant authentication automatically immediately 
+    //after registration success, then we include jwt header
+    //else comment out the first and second line and uncomment the last line 
+    const token = user.generateAuthToken();
+    res.header('x-header-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+    //res.send(_.pick(user, ['_id', 'name', 'email']));
 })
 
 
-router.get('/', async (req,res)=>{
-    try {
-        return res.send(await User
-            .find()
-            .sort('name')
-            .select("name email phone isAdmin"));
-    } catch (error) {
-        return ("Couldn't fetch from mongodb...", error.message);
-    } 
-})
+// router.get('/', async (req,res)=>{
+//     try {
+//         return res.send(await User
+//             .find()
+//             .sort('name')
+//             .select("name email phone isAdmin"));
+//     } catch (error) {
+//         return ("Couldn't fetch from mongodb...", error.message);
+//     } 
+// })
 
 
 

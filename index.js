@@ -12,6 +12,7 @@ const genres = require('./routes/genres');
 const movies = require('./routes/movies');
 const rentals = require('./routes/rentals');
 const users = require('./routes/users');
+const auth = require('./routes/auth');
 //const movies1 = require('./routes/movies-1');
 const mongodb = require('./mongo-vidly');
 const express = require('express');
@@ -35,9 +36,17 @@ app.use('/api/genres', genres);
 app.use('/api/movies', movies);
 app.use('/api/rentals', rentals);
 app.use('/api/users', users);
+app.use('/api/auth', auth);
 //app.use('/api/movies', movies1);
 
 //app.use(logger);
+
+if (!config.get('token.jwtPrivateKey')){
+    console.error('FATAL ERROR: jwtPrivateKey not set!!!');
+    process.exit(1);
+}
+
+
 
 if(app.get('env') === 'development'){
     app.use(morgan('tiny'));
@@ -45,7 +54,7 @@ if(app.get('env') === 'development'){
 }
 
 console.log(`The environment Name : ${config.get('name')}`);
-console.log(`The database is hosted on : ${config.get('database.host')} and the password is ${config.get('database.password')}`);
+console.log(`The database is hosted on : ${config.get('database.host')}`);
 
 
 const port = process.env.PORT || 3000;
