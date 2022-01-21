@@ -30,7 +30,7 @@ router.post('/', async (req,res)=>{
     //after registration success, then we include jwt header
     //else comment out the first and second line and uncomment the last line 
     const token = user.generateAuthToken();
-    res.header('x-header-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+    res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
     //res.send(_.pick(user, ['_id', 'name', 'email']));
 })
 

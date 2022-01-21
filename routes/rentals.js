@@ -5,18 +5,34 @@ const Fawn = require('fawn');
 const {Rental, rentalValidation} = require('../models/rentals-model');
 const {Customer} = require('../models/customers-model');
 const {Movie} = require('../models/movies-model');
+const auth = require('../middleware/auth');
 
 
-//Helper Functions for Asynchronous CRUD Ops
+// async function getRent(movieId = null, customerId = null){
+//     if (movieId)   const movie = await Movie.movie.findById(movieId)
+//     else 
+//     try {
+//         return await Movie.findById(id);
+//     } catch (error) {
+//         return ("Couldn't fetch from mongodb...", error.message);
+//     } 
+// }
 
-async function createRent(movieId, customerId, rentalFee){
-    const movie = await Movie.findById(movieId);
-    if (!movie) return 'Invalid Movie';
 
-    const customer = await Customer.findById(customerId);
-    if (!customer) return 'Invalid Customer';
 
-    if (movie.numberInStock === 0) return 'Movie out of stock!';
+//REST API Functions 
+
+router.post('/', auth, async (req,res)=>{
+    let {error} = rentalValidation(req);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const movie = await Movie.findById(req.body.movieId);
+    if (!movie) return res.status(400).send('Invalid Movie');
+
+    const customer = await Customer.findById(req.body.customerId);
+    if (!customer) res.status(400).send('Invalid Customer');
+
+    if (movie.numberInStock === 0) return res.send('Movie out of stock!');
 
     let rent = new Rental({ 
                             movie: {
@@ -34,54 +50,27 @@ async function createRent(movieId, customerId, rentalFee){
                                 phone:customer.phone,
                                 isGold:customer.isGold
                             },
-                            rentalFee : rentalFee
+                            rentalFee : req.body.rentalFee
     });
     try {
-        rent = await rent.save();
-        movie.numberInStock--;
-        movie.save();
-        return rent;
+        rent = await rent.save();       //save to rent document
+        movie.numberInStock--;          //reduce the number left
+        movie.save();                   //save to movie document to reflect the number left
+        res.send( rent );                    
     } 
     catch (error) {
-        return ("Couldn't write to database...", error.message );
+        res.send("Couldn't write to database");
     } 
-}
-
-async function getRent(){
-    try {
-        return await Rental
-            .find()
-            .select()
-    } catch (error) {
-        return ("Couldn't fetch from database...", error.message);
-    } 
-}
-
-// async function getRent(movieId = null, customerId = null){
-//     if (movieId)   const movie = await Movie.movie.findById(movieId)
-//     else 
-//     try {
-//         return await Movie.findById(id);
-//     } catch (error) {
-//         return ("Couldn't fetch from mongodb...", error.message);
-//     } 
-// }
-
-
-
-//REST API Functions 
-
-router.post('/', async (req,res)=>{
-    let {error} = rentalValidation(req);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    const result = await createRent( req.body.movieId, req.body.customerId, req.body.rentalFee );
-
-    res.send(result);
 })
 
 router.get('/', async (req,res)=>{
-    res.send(await getRent());
+    try {
+        res.send( await Rental
+            .find()
+            .select())
+    } catch (error) {
+        res.send("Couldn't fetch from database");
+    } 
 })
 
 // router.get('/:id', async (req,res)=>{

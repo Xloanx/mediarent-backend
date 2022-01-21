@@ -1,6 +1,7 @@
 //This module used the mongoose EMBEDDED DOCUMENTS model relationship 
 const mongoose = require('mongoose');
 const {genreSchema, genreValidation} = require('./genres-model');
+const Joi = require('joi');
 
 
 //Schema definition
