@@ -43,6 +43,6 @@ function customerValidation(userRequest){
 }
 
 
-
+module.exports.customerSchema = customerSchema;
 module.exports.Customer = Customer;
 module.exports.customerValidatation = customerValidation;

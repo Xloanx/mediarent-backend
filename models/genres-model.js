@@ -31,5 +31,7 @@ function genreValidation(userRequest){
     return schema.validate({genreName: userRequest.body.genreName});
 }
 
+
+module.exports.genreSchema = genreSchema;
 module.exports.Genre = Genre;
 module.exports.genreValidation = genreValidation;
