@@ -3,6 +3,7 @@ const router = express.Router();
 const {Movie, movieValidation} = require('../models/movies-model');
 const {Genre} = require('../models/genres-model');
 const auth = require('../middleware/auth');
+const admin_auth = require('../middleware/admin-auth');
 
 
 //REST API Functions 
@@ -81,7 +82,7 @@ router.put('/:id', auth, async (req,res)=>{
 
 
 
-router.delete('/:id', auth, async (req,res)=>{
+router.delete('/:id', [auth, admin_auth], async (req,res)=>{
     try {
         const movie = await Movie.findByIdAndRemove( req.params.id );
         if(!movie) return res.status(404).send("Invalid Movie Id");

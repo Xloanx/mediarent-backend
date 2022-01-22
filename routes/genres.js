@@ -3,6 +3,7 @@ const router = express.Router();
 const mongodb = require('../mongo-vidly');
 const {Genre, genreValidation} = require('../models/genres-model');
 const auth = require('../middleware/auth');
+const admin_auth = require('../middleware/admin-auth');
 
 
 router.get('/', async (req,res)=>{
@@ -58,7 +59,7 @@ router.put('/:id', auth, async (req,res)=>{
 
 
 
-router.delete('/:id', auth, async (req,res)=>{
+router.delete('/:id', [auth, admin_auth], async (req,res)=>{
     const genre =  await Genre.findByIdAndRemove( req.params.id );
     if(!genre) return res.status(404).send("The Genre Id requested is invalid");
     res.send(`The Genre, '${genre.genreName}' was successfully deleted`);

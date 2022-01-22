@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const mongodb = require('../mongo-vidly');
 const {Customer, customerValidation} = require('../models/customers-model');
 const auth = require('../middleware/auth');
+const admin_auth = require('../middleware/admin-auth');
 
 
 router.get('/', async (req,res)=>{
@@ -62,7 +63,7 @@ router.put('/:id', auth,  async (req,res)=>{
     }
 })
 
-router.delete('/:id', auth,  async (req,res)=>{
+router.delete('/:id', [auth, admin_auth],  async (req,res)=>{
     try {
         const customer = await Customer.findByIdAndRemove( req.params.id );
         if(!customer) return res.status(404).send("Invalid Customer Id!!!");
