@@ -1,3 +1,4 @@
+require('express-async-errors');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const cors = require('cors');
@@ -5,7 +6,9 @@ const morgan = require('morgan')
 const helmet = require('helmet');
 const config = require('config');
 const mongoose = require('mongoose');
-const logger = require('./middleware/logger');  //e.g. of custom middleware
+const express = require('express');
+const app = express();
+//const logger = require('./middleware/logger');  //e.g. of custom middleware
 const home = require('./routes/home');
 const customers = require('./routes/customers');
 const genres = require('./routes/genres');
@@ -13,10 +16,10 @@ const movies = require('./routes/movies');
 const rentals = require('./routes/rentals');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
-//const movies1 = require('./routes/movies-1');
 const mongodb = require('./mongo-vidly');
-const express = require('express');
-const app = express();
+const error = require('./middleware/error');
+const winston = require('./logger/winston');
+
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -29,7 +32,6 @@ app.use(helmet());
 app.use(cors({
     origin: ['http://localhost:3000']
 }));
-
 app.use('/', home);
 app.use('/api/customers', customers);
 app.use('/api/genres', genres);
@@ -37,8 +39,8 @@ app.use('/api/movies', movies);
 app.use('/api/rentals', rentals);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+app.use(error);
 
-//app.use(logger);
 
 if (!config.get('token.jwtPrivateKey')){
     console.error('FATAL ERROR: jwtPrivateKey not set!!!');
@@ -46,9 +48,9 @@ if (!config.get('token.jwtPrivateKey')){
 }
 
 
-
 if(app.get('env') === 'development'){
-    app.use(morgan('tiny'));
+    //app.use(morgan('tiny'));
+    app.use(morgan('combined', { stream: winston.stream }));
     console.log('morgan enabled ...')
 }
 
