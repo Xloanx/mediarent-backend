@@ -7,7 +7,7 @@
         "password" : "VIDLY-DATABASE-PASSWORD"
     },
 
-    "token" : {
-        "jwtPrivateKey" : "VIDLY-JWTPRIVATEDKEY"
-    }
+   
+    "jwtPrivateKey" : "VIDLY-JWTPRIVATEDKEY"
+    
 }

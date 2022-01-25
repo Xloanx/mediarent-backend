@@ -1,5 +1,9 @@
 const appRoot = require('app-root-path');
 const winston = require('winston');
+const { combine, timestamp, label, prettyPrint } = winston.format;
+const config = require('config');
+require('winston-mongodb');
+
 
 
 
@@ -17,9 +21,18 @@ const levels = {
 
 // define the custom settings for each transport (file, console)
 const options = {
-  file: {
+  file_err: {
+    level: 'error',
+    filename: `${appRoot}/logs/app_err.log`,
+    handleExceptions: true,
+    json: true,
+    maxsize: 5242880, // 5MB
+    maxFiles: 5,
+    colorize: false,
+  },
+  file_nerr: {
     level: 'info',
-    filename: `${appRoot}/logs/app.log`,
+    filename: `${appRoot}/logs/app_nerr.log`,
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB
@@ -39,14 +52,23 @@ const options = {
 // instantiate a new Winston Logger with the settings defined above
 //var logger = new winston.Logger({
 const logger = winston.createLogger({
+    format: combine(
+        //label({ label: 'right meow!' }),
+        timestamp(),
+        prettyPrint()
+      ),
   transports: [
-    new winston.transports.File(options.file),
+    new winston.transports.File(options.file_err),
+    new winston.transports.File(options.file_nerr),
     new winston.transports.Console(options.console)
   ],
   exitOnError: false, // do not exit on handled exceptions
 });
 
-
+// logger.add(winston.transports.MongoDB, {
+//     db: `mongodb://${config.get('database.host')}/vidlydb`, 
+//     level : 'info'
+// });
 
 // create a stream object with a 'write' function that will be used by `morgan`
 logger.stream = {

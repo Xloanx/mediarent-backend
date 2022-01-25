@@ -11,7 +11,6 @@ const admin_auth = require('../middleware/admin-auth');
 router.post('/', auth, async (req,res)=>{
     let {error} = movieValidation(req);
     if (error) return res.status(400).send(error.details[0].message);
-    try {
     const genre = await Genre.findById(req.body.genreId);
     if (!genre) return res.send('Invalid Genre');
     const movie = new Movie({ 
@@ -24,35 +23,23 @@ router.post('/', auth, async (req,res)=>{
                             dailyRentalRate: req.body.dailyRentalRate
     });
     res.send(await movie.save());
-    } 
-    catch (error) {
-        res.send("Couldn't write to database...");
-    } 
 })
 
 
 
 router.get('/', async (req,res)=>{
-    try {
-        res.send( await Movie
-                        .find()
-                        .populate('genre', 'genreName')
-                        .select('title genre numberInStock dailyRentalRate'));
-    } catch (error) {
-        return ("Couldn't fetch movies from database!!!");
-    } 
+    res.send( await Movie
+            .find()
+            .populate('genre', 'genreName')
+            .select('title genre numberInStock dailyRentalRate'));
 })
 
 
 
 router.get('/:id', async (req,res)=>{
-    try {
-        const movie = await Movie.findById(req.params.id);
-        if(!movie) return res.status(404).send("Invalid Movie Id!!!");
-        res.send(movie);
-    } catch (error) {
-        res.send("Couldn't fetch from db!!!");
-    } 
+    const movie = await Movie.findById(req.params.id);
+    if(!movie) return res.status(404).send("Invalid Movie Id!!!");
+    res.send(movie);
 })
 
 
@@ -60,36 +47,28 @@ router.get('/:id', async (req,res)=>{
 router.put('/:id', auth, async (req,res)=>{
     let {error} = movieValidation(req);
     if (error) return res.status(400).send(error.details[0].message);
-    try {
-        const movie = await Movie.findById(req.params.id);
-        if(!movie) return res.status(404).send("Invalid Movie Id");
-        const genre = await Genre.findById(req.body.genreId);
-        if(!genre) return res.status(404).send("Invalid Movie Id");
+    const movie = await Movie.findById(req.params.id);
+    if(!movie) return res.status(404).send("Invalid Movie Id");
+    const genre = await Genre.findById(req.body.genreId);
+    if(!genre) return res.status(404).send("Invalid Movie Id");
 
-        movie.title = req.body.title;
-        movie.genre= {
-                    _id : genre._id,
-                    genreName: genre.genreName
-        }                                      
-        movie.numberInStock = req.body.numberInStock;
-        movie.dailyRentalRate =  req.body.dailyRentalRate;
-        await movie.save();
-        res.send(`The movie, "${movie.title}" was successfully edited`);
-    } catch (error) {
-        res.send("Couldn't update movie on database!!!");
-    }
+    movie.title = req.body.title;
+    movie.genre= {
+                _id : genre._id,
+                genreName: genre.genreName
+    }                                      
+    movie.numberInStock = req.body.numberInStock;
+    movie.dailyRentalRate =  req.body.dailyRentalRate;
+    await movie.save();
+    res.send(`The movie, "${movie.title}" was successfully edited`);
 })
 
 
 
 router.delete('/:id', [auth, admin_auth], async (req,res)=>{
-    try {
         const movie = await Movie.findByIdAndRemove( req.params.id );
         if(!movie) return res.status(404).send("Invalid Movie Id");
         res.send(`The Movie, '${movie.title}' was successfully deleted`);
-    } catch (error) {
-        res.send("Couldn't fetch the specified resource for deletion!!!")
-    }
 
 })
 

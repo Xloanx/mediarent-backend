@@ -52,25 +52,16 @@ router.post('/', auth, async (req,res)=>{
                             },
                             rentalFee : req.body.rentalFee
     });
-    try {
         rent = await rent.save();       //save to rent document
         movie.numberInStock--;          //reduce the number left
         movie.save();                   //save to movie document to reflect the number left
-        res.send( rent );                    
-    } 
-    catch (error) {
-        res.send("Couldn't write to database");
-    } 
+        res.send( rent );
 })
 
 router.get('/', async (req,res)=>{
-    try {
         res.send( await Rental
             .find()
-            .select())
-    } catch (error) {
-        res.send("Couldn't fetch from database");
-    } 
+            .select());
 })
 
 // router.get('/me', auth, async (req,res)=>{

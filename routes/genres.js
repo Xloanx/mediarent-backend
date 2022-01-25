@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const mongodb = require('../mongo-vidly');
 const {Genre, genreValidation} = require('../models/genres-model');
 const auth = require('../middleware/auth');
 const admin_auth = require('../middleware/admin-auth');

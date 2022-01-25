@@ -3,3 +3,4 @@ mongo.js
 mysql-vidly.js
 routes/movies-1.js
 routes/genres1.js
+logs/
