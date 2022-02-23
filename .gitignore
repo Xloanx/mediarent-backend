@@ -4,3 +4,5 @@ mysql-vidly.js
 routes/movies-1.js
 routes/genres1.js
 logs/
+combined.log
+config/test.json

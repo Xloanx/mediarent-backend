@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll --verbose"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +12,7 @@
   "dependencies": {
     "app-root-path": "^3.0.0",
     "bcrypt": "^5.0.1",
+    "compression": "^1.7.4",
     "config": "^3.3.6",
     "cors": "^2.8.5",
     "debug": "^4.3.2",
@@ -28,5 +29,9 @@
     "pug": "^3.0.2",
     "winston": "^3.4.0",
     "winston-mongodb": "^5.0.7"
+  },
+  "devDependencies": {
+    "jest": "^27.5.0",
+    "supertest": "^6.2.2"
   }
 }

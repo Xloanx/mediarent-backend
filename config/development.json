@@ -1,11 +1,17 @@
 {
     "name" : "My Vidly App - Development",
-    "mail" : {
-        "host" : "127.0.0.1"
-    },
-    "database" :{
-        "host" : "127.0.0.1",
-        "user" : "xloanx"
-    }
 
+    "mail" : {
+        "host" : "127.0.0.1",
+        "password" : "VIDLY-MAIL-PASSWORD"
+    },
+    
+    "database" :{
+        "db" : "mongodb://127.0.0.1/vidlydb",
+        "user" : "xloanx",
+        "password" : "VIDLY-DATABASE-PASSWORD"
+    },
+
+    "jwtPrivateKey" : "VIDLY-JWTPRIVATEDKEY"
+    
 }

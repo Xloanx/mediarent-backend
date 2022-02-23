@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 const winston = require('../logger/winston');
 
 module.exports = async function() {
-        await mongoose.connect(`mongodb://${config.get('database.host')}/vidlydb`);
-        winston.info('Connected to mongodb...');
+        const db = config.get('database.db');
+        await mongoose.connect(db);
+        winston.info(`Connected to ${db}`);
 }
 
  
