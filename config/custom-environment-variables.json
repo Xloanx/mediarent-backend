@@ -4,7 +4,7 @@
     },
 
     "database" :{
-        "password" : "VIDLY-DATABASE-PASSWORD"
+        "db" : "VIDLY-DB"
     },
    
     "jwtPrivateKey" : "VIDLY-JWTPRIVATEDKEY"

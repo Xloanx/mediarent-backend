@@ -7,11 +7,9 @@
     },
     
     "database" :{
-        "db" : "mongodb://127.0.0.1/vidlydb",
-        "user" : "xloanx",
-        "password" : "VIDLY-DATABASE-PASSWORD"
+        "db" : ""
     },
 
-    "jwtPrivateKey" : "VIDLY-JWTPRIVATEDKEY"
+    "jwtPrivateKey" : ""
     
 }
